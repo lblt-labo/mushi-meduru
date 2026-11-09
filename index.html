@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>虫愛づる君たち｜身近な出会いを愛でるための記録帖</title>
+<meta name="description" content="身近な出会いを愛でるための記録帖">
+<meta name="theme-color" content="#3b2f25">
+<meta property="og:type" content="website">
+<meta property="og:title" content="虫愛づる君たち">
+<meta property="og:description" content="身近な出会いを愛でるための記録帖">
+<meta property="og:image" content="./ogp.png">
+<meta name="twitter:title" content="虫愛づる君たち">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="./ogp.png">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<style>
+:root{--wood:#3b2f25;--wood2:#54443a;--kiri:#d9c7a8;--kiri2:#c8b38f;--paper:#f6f0e2;--ink:#2a211a;--moss:#1d5a8a;--red:#d55e00;--line:#a8956f}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--kiri);color:var(--ink);font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;line-height:1.7;padding-bottom:env(safe-area-inset-bottom)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;transition:transform .12s ease,filter .12s ease,box-shadow .12s ease}
+button:active{transform:scale(.95);filter:brightness(.88)}
+.card:active{box-shadow:0 0 0 3px var(--moss)}
+.card,.cal .d,.mt{min-height:44px}
+:focus-visible{outline:3px solid var(--moss);outline-offset:2px}
+header{position:sticky;top:0;z-index:20;background:var(--wood);color:var(--kiri);display:flex;align-items:center;gap:.5rem;padding:calc(.5rem + env(safe-area-inset-top)) .75rem .5rem}
+header h1{flex:1;margin:0;font-size:1.15rem;font-weight:700;letter-spacing:.08em;line-height:1.25}
+header h1 small{display:block;font-size:.68rem;font-weight:400;letter-spacing:.04em;color:#e8dcc4}
+.ib{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--kiri2);background:transparent;color:var(--kiri);font-size:1.15rem;display:grid;place-items:center}
+.tabs{display:flex;background:var(--wood2);position:sticky;top:calc(64px + env(safe-area-inset-top));z-index:19}
+.tabs button{flex:1;padding:.6rem .2rem;border:0;background:transparent;color:var(--kiri2);font-size:.88rem;border-bottom:3px solid transparent}
+.tabs button[aria-selected=true]{color:#fff;border-bottom-color:var(--kiri)}
+.tools{display:flex;gap:.5rem;padding:.6rem .75rem;max-width:960px;margin:0 auto}
+.tools input,.tools select{min-height:44px;border:1.5px solid var(--line);background:var(--paper);border-radius:6px;padding:.3rem .6rem}
+.tools input{flex:1;min-width:0}
+main{max-width:960px;margin:0 auto;padding:.25rem .75rem 5.5rem}
+.box{background:var(--kiri2);border:6px solid var(--wood2);border-radius:4px;box-shadow:inset 0 0 0 2px var(--line),inset 0 6px 14px rgba(0,0,0,.25);padding:.75rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.7rem}
+.card{background:var(--paper);border:1px solid var(--line);padding:.4rem;text-align:left;border-radius:2px;box-shadow:0 2px 4px rgba(0,0,0,.25);position:relative;display:block;width:100%}
+.card::before{content:"";position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:var(--red);box-shadow:0 1px 2px rgba(0,0,0,.5)}
+.card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#ddd;border-radius:1px}
+.card .cap{font-size:.78rem;margin-top:.3rem;line-height:1.35;word-break:break-all}
+.card .cap b{display:block;font-size:.88rem}
+.card .cap small{color:#4f4336}
+.empty{padding:2.2rem 1rem;text-align:center;color:#5c4d3d}
+.fab{position:fixed;right:1rem;bottom:calc(1rem + env(safe-area-inset-bottom));width:60px;height:60px;border-radius:50%;border:3px solid var(--kiri);background:var(--moss);color:#fff;font-size:1.8rem;box-shadow:0 3px 8px rgba(0,0,0,.4);z-index:25}
+.nav{display:flex;align-items:center;justify-content:center;gap:1rem;margin:.3rem 0 .6rem}
+.nav button{min-width:44px;min-height:44px;border:1.5px solid var(--line);background:var(--paper);border-radius:6px}
+.nav span{font-weight:700;min-width:7rem;text-align:center}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal .dw{text-align:center;font-size:.75rem;color:#5c4d3d}
+.cal .d{aspect-ratio:1;border:1px solid var(--line);background:var(--paper);border-radius:3px;padding:2px;font-size:.7rem;position:relative;overflow:hidden;text-align:left}
+.cal .d.has{background-size:cover;background-position:center;color:#fff;text-shadow:0 0 3px #000,0 0 3px #000;font-weight:700}
+.cal .d.sel{outline:3px solid var(--moss)}
+.cal .d i{position:absolute;right:3px;bottom:1px;font-style:normal;background:var(--wood);color:#fff;border-radius:8px;padding:0 5px;font-size:.65rem;text-shadow:none}
+.cal .d.blank{visibility:hidden}
+.months{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.6rem}
+.mt{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:.5rem;text-align:left}
+.mt b{display:block}.mt .th{display:flex;gap:2px;margin-top:.3rem;height:36px}.mt .th img{width:36px;height:36px;object-fit:cover}
+.chips{display:flex;gap:.4rem;overflow-x:auto;padding:.2rem 0 .6rem}
+.chips button{white-space:nowrap;min-height:40px;padding:0 .8rem;border:1.5px solid var(--line);background:var(--paper);border-radius:20px}
+.chips button[aria-pressed=true]{background:var(--wood);color:var(--kiri);border-color:var(--wood)}
+h2.fh{font-size:1rem;margin:.8rem 0 .4rem;border-bottom:2px solid var(--line)}
+.ov{position:fixed;inset:0;background:rgba(30,22,16,.7);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--paper);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:12px 12px 0 0;padding:1rem 1rem calc(1.2rem + env(safe-area-inset-bottom))}
+@media(min-width:600px){.ov{align-items:center}.sheet{border-radius:12px}}
+.sheet h3{margin:0 0 .6rem;font-size:1.1rem}
+.sheet img.ph{width:100%;max-height:60vh;object-fit:contain;background:#ddd;border-radius:4px}
+label{display:block;font-size:.85rem;margin:.7rem 0 .2rem;font-weight:700}
+.sheet input[type=text],.sheet input[type=datetime-local],.sheet input[type=password],.sheet textarea,.sheet select{width:100%;min-height:44px;border:1.5px solid var(--line);background:#fffdf6;border-radius:6px;padding:.4rem .6rem}
+.sheet textarea{min-height:100px}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem}
+.btn{min-height:44px;padding:0 1rem;border-radius:6px;border:1.5px solid var(--wood);background:var(--paper);font-weight:700}
+.btn.pri{background:var(--moss);border-color:var(--moss);color:#fff}
+.btn.dng{border-color:#8f3d00;color:#8f3d00;background:#fff3e8}
+.hint{font-size:.8rem;color:#5a4d3e;margin:.2rem 0}
+.help p,.help li{font-size:.9rem}
+.dl{margin:.3rem 0}.dl b{display:inline-block;min-width:5.5em}
+#lock{position:fixed;inset:0;background:var(--wood);color:var(--kiri);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;padding:1rem;text-align:center}
+#lock input{width:12rem;min-height:48px;text-align:center;font-size:1.4rem;letter-spacing:.4em;border-radius:6px;border:2px solid var(--kiri2);background:var(--paper)}
+#inst{position:fixed;left:.7rem;right:.7rem;bottom:calc(5.2rem + env(safe-area-inset-bottom));z-index:30;background:var(--wood);color:var(--kiri);border:1.5px solid var(--kiri2);border-radius:10px;padding:.8rem;transform:translateY(160%);transition:transform .5s ease;max-width:520px;margin:0 auto}
+#inst.show{transform:none}
+#inst p{margin:0 0 .5rem;font-size:.88rem}
+.toast{position:fixed;left:50%;bottom:6rem;transform:translateX(-50%);background:var(--wood);color:#fff;padding:.5rem 1rem;border-radius:20px;z-index:60;font-size:.85rem}
+@media(prefers-reduced-motion:reduce){#inst,button{transition:none}button:active{transform:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>虫愛づる君たち<small>身近な出会いを愛でるための記録帖</small></h1>
+  <button class="ib" id="btnHelp" aria-label="使い方ガイドを開く" title="使い方">？</button>
+  <button class="ib" id="btnSet" aria-label="設定を開く" title="設定">⚙</button>
+</header>
+<nav class="tabs" role="tablist" aria-label="表示切り替え">
+  <button role="tab" data-v="grid" aria-selected="true">標本箱</button>
+  <button role="tab" data-v="month" aria-selected="false">月</button>
+  <button role="tab" data-v="year" aria-selected="false">年</button>
+  <button role="tab" data-v="family" aria-selected="false">科別リスト</button>
+</nav>
+<div class="tools">
+  <input type="text" id="q" placeholder="和名・メモ・場所で検索" aria-label="キーワード検索">
+  <select id="sort" aria-label="並び順">
+    <option value="new">新しい順</option>
+    <option value="old">古い順</option>
+    <option value="name">和名順</option>
+  </select>
+</div>
+<main id="main"></main>
+<button class="fab" id="btnAdd" aria-label="虫を採集して登録する">＋</button>
+<div id="inst" role="dialog" aria-label="ホーム画面に追加"></div>
+<div id="lock" hidden></div>
+<div id="modalRoot"></div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var KEY = 'mushi_items_v1', SKEY = 'mushi_settings_v1', IKEY = 'mushi_inst_dismissed';
+  var items = [], settings = { display: 'nameDate', pass: '' };
+  var st = { view: 'grid', q: '', sort: 'new', y: new Date().getFullYear(), m: new Date().getMonth(), day: '', fam: '' };
+  var deferred = null;
+  var $ = function (id) { return document.getElementById(id); };
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function toast(t) {
+    try { var d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 2200); } catch (e) {}
+  }
+  function load() {
+    try { var a = JSON.parse(localStorage.getItem(KEY) || '[]'); items = Array.isArray(a) ? a : []; } catch (e) { items = []; }
+    try { var s = JSON.parse(localStorage.getItem(SKEY) || '{}'); if (s && typeof s === 'object') { settings.display = s.display || 'nameDate'; settings.pass = s.pass || ''; } } catch (e) {}
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(items)); return true; }
+    catch (e) { toast('保存できませんでした。容量不足の可能性があります。バックアップを取って古い写真を整理してください'); return false; }
+  }
+  function saveSet() { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch (e) {} }
+  function uid() { return 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function nowLocal() { var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); }
+  function dateOf(it) { return (it.date || '').slice(0, 10); }
+  function fmt(it) { var d = (it.date || '').replace('T', ' '); return d; }
+
+  function list() {
+    var q = st.q.trim().toLowerCase();
+    var a = items.filter(function (it) {
+      if (!q) return true;
+      return [it.name, it.family, it.place, it.memo].join(' ').toLowerCase().indexOf(q) >= 0;
+    });
+    a.sort(function (x, y) {
+      if (st.sort === 'name') return (x.name || '').localeCompare(y.name || '', 'ja');
+      var r = (x.date || '').localeCompare(y.date || '');
+      return st.sort === 'old' ? r : -r;
+    });
+    return a;
+  }
+
+  function cardHtml(it) {
+    var cap = '', d = settings.display;
+    var nm = esc(it.name || '名前未定');
+    if (d === 'nameDate') cap = '<div class="cap"><b>' + nm + '</b><small>' + esc(dateOf(it)) + '</small></div>';
+    else if (d === 'name') cap = '<div class="cap"><b>' + nm + '</b></div>';
+    else if (d === 'nameFamily') cap = '<div class="cap"><b>' + nm + '</b><small>' + esc(it.family || '') + '</small></div>';
+    return '<button class="card" data-id="' + esc(it.id) + '" aria-label="' + nm + 'の詳細を開く"><img src="' + esc(it.photo) + '" alt="' + nm + '" loading="lazy">' + cap + '</button>';
+  }
+  function gridHtml(a) {
+    if (!a.length) return '<div class="empty">該当する標本はありません。</div>';
+    return '<div class="grid">' + a.map(cardHtml).join('') + '</div>';
+  }
+
+  function render() {
+    try {
+      var m = $('main'); if (!m) return;
+      var a = list(), h = '';
+      if (!items.length) {
+        h = '<div class="box"><div class="empty">標本箱はまだ空です。<br>右下の「＋」から、見つけた虫を最初の一匹としてクリップしましょう。</div></div>';
+      } else if (st.view === 'grid') {
+        h = '<div class="box">' + gridHtml(a) + '</div>';
+      } else if (st.view === 'month') h = monthHtml(a);
+      else if (st.view === 'year') h = yearHtml(a);
+      else h = familyHtml(a);
+      m.innerHTML = h;
+      bindMain();
+    } catch (e) { var mm = $('main'); if (mm) mm.innerHTML = '<div class="empty">表示中にエラーが起きました。再読み込みしてください。</div>'; }
+  }
+
+  function monthHtml(a) {
+    var y = st.y, mo = st.m, first = new Date(y, mo, 1).getDay(), days = new Date(y, mo + 1, 0).getDate();
+    var by = {}, pre = y + '-' + String(mo + 1).padStart(2, '0');
+    a.forEach(function (it) { var d = dateOf(it); if (d.indexOf(pre) === 0) (by[d] = by[d] || []).push(it); });
+    var h = '<div class="nav"><button data-nav="-1" aria-label="前の月">◀</button><span>' + y + '年' + (mo + 1) + '月</span><button data-nav="1" aria-label="次の月">▶</button></div><div class="box"><div class="cal">';
+    '日月火水木金土'.split('').forEach(function (w) { h += '<div class="dw">' + w + '</div>'; });
+    for (var i = 0; i < first; i++) h += '<div class="d blank"></div>';
+    for (var d = 1; d <= days; d++) {
+      var key = pre + '-' + String(d).padStart(2, '0'), l = by[key];
+      if (l) h += '<button class="d has' + (st.day === key ? ' sel' : '') + '" data-day="' + key + '" style="background-image:url(' + "'" + l[0].photo + "'" + ')" aria-label="' + d + '日 ' + l.length + '件">' + d + '<i>' + l.length + '</i></button>';
+      else h += '<div class="d">' + d + '</div>';
+    }
+    h += '</div></div>';
+    var shown = st.day && by[st.day] ? by[st.day] : [].concat.apply([], Object.keys(by).sort().map(function (k) { return by[k]; }));
+    h += '<h2 class="fh">' + (st.day && by[st.day] ? st.day + ' の標本' : 'この月の標本') + '</h2><div class="box">' + gridHtml(shown) + '</div>';
+    return h;
+  }
+  function yearHtml(a) {
+    var y = st.y, h = '<div class="nav"><button data-ynav="-1" aria-label="前の年">◀</button><span>' + y + '年</span><button data-ynav="1" aria-label="次の年">▶</button></div><div class="box"><div class="months">';
+    for (var mo = 0; mo < 12; mo++) {
+      var pre = y + '-' + String(mo + 1).padStart(2, '0');
+      var l = a.filter(function (it) { return dateOf(it).indexOf(pre) === 0; });
+      h += '<button class="mt" data-mo="' + mo + '"><b>' + (mo + 1) + '月　' + l.length + '件</b><div class="th">' + l.slice(0, 3).map(function (it) { return '<img src="' + esc(it.photo) + '" alt="">'; }).join('') + '</div></button>';
+    }
+    return h + '</div></div>';
+  }
+  function familyHtml(a) {
+    var fams = {};
+    a.forEach(function (it) { var f = (it.family || '').trim() || '科未設定'; (fams[f] = fams[f] || []).push(it); });
+    var keys = Object.keys(fams).sort(function (x, y) { return x.localeCompare(y, 'ja'); });
+    var h = '<div class="chips" role="group" aria-label="科で絞り込み"><button data-fam="" aria-pressed="' + (st.fam === '') + '">すべて</button>';
+    keys.forEach(function (k) { h += '<button data-fam="' + esc(k) + '" aria-pressed="' + (st.fam === k) + '">' + esc(k) + ' (' + fams[k].length + ')</button>'; });
+    h += '</div>';
+    var use = st.fam && fams[st.fam] ? [st.fam] : keys;
+    use.forEach(function (k) { h += '<h2 class="fh">' + esc(k) + '</h2><div class="box">' + gridHtml(fams[k]) + '</div>'; });
+    if (!use.length) h += '<div class="empty">該当する標本はありません。</div>';
+    return h;
+  }
+
+  function bindMain() {
+    var m = $('main'); if (!m) return;
+    m.querySelectorAll('[data-id]').forEach(function (b) { b.onclick = function () { openDetail(b.getAttribute('data-id')); }; });
+    m.querySelectorAll('[data-nav]').forEach(function (b) { b.onclick = function () { var n = new Date(st.y, st.m + parseInt(b.getAttribute('data-nav'), 10), 1); st.y = n.getFullYear(); st.m = n.getMonth(); st.day = ''; render(); }; });
+    m.querySelectorAll('[data-ynav]').forEach(function (b) { b.onclick = function () { st.y += parseInt(b.getAttribute('data-ynav'), 10); render(); }; });
+    m.querySelectorAll('[data-day]').forEach(function (b) { b.onclick = function () { var k = b.getAttribute('data-day'); st.day = st.day === k ? '' : k; render(); }; });
+    m.querySelectorAll('[data-mo]').forEach(function (b) { b.onclick = function () { st.m = parseInt(b.getAttribute('data-mo'), 10); st.day = ''; setView('month'); }; });
+    m.querySelectorAll('[data-fam]').forEach(function (b) { b.onclick = function () { st.fam = b.getAttribute('data-fam'); render(); }; });
+  }
+  function setView(v) {
+    st.view = v;
+    document.querySelectorAll('.tabs button').forEach(function (b) { b.setAttribute('aria-selected', String(b.getAttribute('data-v') === v)); });
+    render();
+  }
+
+  /* ---- modal ---- */
+  function closeModal() { var r = $('modalRoot'); if (r) r.innerHTML = ''; }
+  function openSheet(html, onReady) {
+    var r = $('modalRoot'); if (!r) return;
+    r.innerHTML = '<div class="ov" id="ov"><div class="sheet" role="dialog" aria-modal="true">' + html + '</div></div>';
+    var ov = $('ov');
+    if (ov) ov.addEventListener('click', function (e) { if (e.target === ov) closeModal(); });
+    if (onReady) { try { onReady(r); } catch (e) {} }
+  }
+  function find(id) { for (var i = 0; i < items.length; i++) if (items[i].id === id) return items[i]; return null; }
+
+  function openDetail(id) {
+    var it = find(id); if (!it) return;
+    openSheet('<h3>' + esc(it.name || '名前未定') + '</h3><img class="ph" src="' + esc(it.photo) + '" alt="' + esc(it.name) + '">' +
+      '<div class="dl"><b>科</b>' + esc(it.family || '—') + '</div><div class="dl"><b>採集日時</b>' + esc(fmt(it) || '—') + '</div><div class="dl"><b>採集場所</b>' + esc(it.place || '—') + '</div>' +
+      '<div class="dl"><b>観察メモ</b></div><div style="white-space:pre-wrap">' + esc(it.memo || '（メモなし）') + '</div>' +
+      '<div class="row"><button class="btn pri" id="dEdit">編集する</button><button class="btn" id="dClose">閉じる</button></div>',
+      function () { $('dEdit').onclick = function () { openForm(id); }; $('dClose').onclick = closeModal; });
+  }
+
+  function resize(file, cb) {
+    try {
+      var fr = new FileReader();
+      fr.onerror = function () { toast('写真を読み込めませんでした'); };
+      fr.onload = function () {
+        var img = new Image();
+        img.onerror = function () { toast('画像として開けませんでした'); };
+        img.onload = function () {
+          try {
+            var mx = 900, s = Math.min(1, mx / Math.max(img.width, img.height));
+            var c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+            cb(c.toDataURL('image/jpeg', 0.8));
+          } catch (e) { toast('写真の処理に失敗しました'); }
+        };
+        img.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    } catch (e) { toast('写真の処理に失敗しました'); }
+  }
+
+  function openForm(id) {
+    var it = id ? find(id) : null, photo = it ? it.photo : '';
+    var v = it || { name: '', family: '', date: nowLocal(), place: '', memo: '' };
+    openSheet('<h3>' + (it ? '標本を編集' : '虫を採集する') + '</h3>' +
+      '<img class="ph" id="pv" alt="選択した写真" ' + (photo ? 'src="' + esc(photo) + '"' : 'hidden') + '>' +
+      '<div class="row"><button class="btn" id="fCam">📷 撮影する</button><button class="btn" id="fFile">🖼 写真を選ぶ</button></div>' +
+      '<input type="file" id="inCam" accept="image/*" capture="environment" hidden><input type="file" id="inFile" accept="image/*" hidden>' +
+      '<label for="fName">和名 / 名称</label><input type="text" id="fName" value="' + esc(v.name) + '">' +
+      '<div class="row"><button class="btn" id="sImg">Google画像検索</button><button class="btn" id="sWiki">Wikipedia</button><button class="btn" id="sZukan">図鑑サイトで調べる</button><button class="btn" id="sLens">写真から調べる</button></div>' +
+      '<p class="hint">外部サイトで調べた名前は、コピーして上の欄に貼り付けて保存できます。「写真から調べる」はGoogle画像検索を開くので、そこで写真をアップロードしてください。</p>' +
+      '<label for="fFam">科（グループ分類用）</label><input type="text" id="fFam" value="' + esc(v.family) + '" placeholder="例：タテハチョウ科">' +
+      '<label for="fDate">採集日・時間</label><input type="datetime-local" id="fDate" value="' + esc(v.date) + '">' +
+      '<label for="fPlace">採集場所</label><input type="text" id="fPlace" value="' + esc(v.place) + '">' +
+      '<label for="fMemo">観察メモ</label><textarea id="fMemo">' + esc(v.memo) + '</textarea>' +
+      '<div class="row"><button class="btn pri" id="fSave">保存する</button><button class="btn" id="fCancel">キャンセル</button>' + (it ? '<button class="btn dng" id="fDel">削除</button>' : '') + '</div>',
+      function () {
+        function got(f) { if (!f) return; resize(f, function (d) { photo = d; var p = $('pv'); p.src = d; p.hidden = false; }); }
+        $('fCam').onclick = function () { $('inCam').click(); };
+        $('fFile').onclick = function () { $('inFile').click(); };
+        $('inCam').onchange = function () { got(this.files && this.files[0]); };
+        $('inFile').onchange = function () { got(this.files && this.files[0]); };
+        function q() { return ($('fName').value || '').trim(); }
+        function go(u) { try { window.open(u, '_blank', 'noopener'); } catch (e) {} }
+        $('sImg').onclick = function () { go('https://www.google.com/search?tbm=isch&q=' + encodeURIComponent((q() || '虫') + ' 昆虫')); };
+        $('sWiki').onclick = function () { go('https://ja.wikipedia.org/w/index.php?search=' + encodeURIComponent(q() || '昆虫')); };
+        $('sZukan').onclick = function () { go('https://www.google.com/search?q=' + encodeURIComponent((q() || '虫') + ' 昆虫図鑑')); };
+        $('sLens').onclick = function () { go('https://images.google.com/'); };
+        $('fCancel').onclick = function () { it ? openDetail(id) : closeModal(); };
+        if ($('fDel')) $('fDel').onclick = function () {
+          if (!confirm('この標本を削除します。元に戻せません。よろしいですか？')) return;
+          items = items.filter(function (x) { return x.id !== id; }); save(); closeModal(); render(); toast('削除しました');
+        };
+        $('fSave').onclick = function () {
+          if (!photo) { toast('写真を追加してください'); return; }
+          var rec = { id: it ? it.id : uid(), photo: photo, name: $('fName').value.trim(), family: $('fFam').value.trim(), date: $('fDate').value || nowLocal(), place: $('fPlace').value.trim(), memo: $('fMemo').value };
+          var backup = items.slice();
+          if (it) items = items.map(function (x) { return x.id === it.id ? rec : x; }); else items.push(rec);
+          if (!save()) { items = backup; return; }
+          closeModal(); render(); toast(it ? '更新しました' : '標本箱にクリップしました');
+        };
+      });
+  }
+
+  /* ---- help ---- */
+  function openHelp() {
+    openSheet('<div class="help"><h3>使い方</h3><ul>' +
+      '<li>右下の「＋」で虫を撮影、または写真を選んで登録します。見つけた虫だけが標本箱に並びます。</li>' +
+      '<li>名前が分からないときは、登録画面の検索ボタンで調べ、コピーして和名欄に貼り付けます。</li>' +
+      '<li>カードをタップすると詳細が開き、「編集する」から追記・修正できます。</li>' +
+      '<li>上のタブで「標本箱・月・年・科別」の表示を切り替えます。検索欄と並び順も使えます。</li>' +
+      '<li>設定（⚙）で、カードに載せる情報の選択、バックアップ（JSON）、パスコードの設定ができます。</li>' +
+      '<li>データはこの端末のブラウザ内に保存されます。機種変更や消失に備えて、ときどきバックアップしてください。</li></ul>' +
+      '<div class="row"><button class="btn pri" id="hClose">閉じる</button></div></div>',
+      function () { $('hClose').onclick = closeModal; });
+  }
+
+  /* ---- settings ---- */
+  function openSettings() {
+    var dsp = [['nameDate', '和名＋採集日'], ['name', '和名のみ'], ['nameFamily', '和名＋科'], ['photo', '写真のみ'], ['none', '何も表示しない（写真の美しさだけ）']];
+    var h = '<h3>設定</h3><label for="sDisp">標本カードに載せる情報</label><select id="sDisp">' +
+      dsp.map(function (p) { return '<option value="' + p[0] + '"' + (settings.display === p[0] ? ' selected' : '') + '>' + p[1] + '</option>'; }).join('') + '</select>' +
+      '<label>バックアップ（JSONファイル）</label><div class="row"><button class="btn" id="bExp">書き出す</button><button class="btn" id="bImp">読み込む</button></div><input type="file" id="inJson" accept="application/json,.json" hidden>' +
+      '<p class="hint">読み込むと、同じ標本は上書きされ、新しい標本は追加されます。</p>' +
+      '<label for="pNew">パスコードロック（現在：' + (settings.pass ? 'オン' : 'オフ') + '）</label><input type="password" id="pNew" inputmode="numeric" autocomplete="off" placeholder="4桁以上の数字">' +
+      '<div class="row"><button class="btn pri" id="pSet">' + (settings.pass ? '変更する' : 'オンにする') + '</button>' + (settings.pass ? '<button class="btn dng" id="pOff">解除する</button>' : '') + '</div>' +
+      '<p class="hint">パスコードを忘れると、このアプリを開けなくなります。事前にバックアップを取っておくことをおすすめします。</p>' +
+      '<div class="row"><button class="btn" id="sClose">閉じる</button></div>';
+    openSheet(h, function () {
+      $('sDisp').onchange = function () { settings.display = this.value; saveSet(); render(); };
+      $('sClose').onclick = closeModal;
+      $('bExp').onclick = exportJson;
+      $('bImp').onclick = function () { $('inJson').click(); };
+      $('inJson').onchange = function () { importJson(this.files && this.files[0]); };
+      $('pSet').onclick = function () {
+        var p = $('pNew').value.trim();
+        if (!/^\d{4,}$/.test(p)) { toast('4桁以上の数字を入力してください'); return; }
+        hash(p, function (h2) { settings.pass = h2; saveSet(); toast('パスコードを設定しました'); openSettings(); });
+      };
+      if ($('pOff')) $('pOff').onclick = function () {
+        if (!confirm('パスコードロックを解除しますか？')) return;
+        settings.pass = ''; saveSet(); toast('解除しました'); openSettings();
+      };
+    });
+  }
+  function hash(s, cb) {
+    try {
+      if (window.crypto && crypto.subtle && window.TextEncoder) {
+        crypto.subtle.digest('SHA-256', new TextEncoder().encode('mushi:' + s)).then(function (b) {
+          cb('s:' + Array.prototype.map.call(new Uint8Array(b), function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''));
+        }).catch(function () { cb(simple(s)); });
+        return;
+      }
+    } catch (e) {}
+    cb(simple(s));
+  }
+  function simple(s) { var h = 5381; for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return 'p:' + h; }
+
+  function exportJson() {
+    try {
+      var data = JSON.stringify({ app: 'mushi-mezuru', version: 1, exportedAt: new Date().toISOString(), settings: { display: settings.display }, items: items }, null, 1);
+      var blob = new Blob([data], { type: 'application/json' }), a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'mushi-zukan-' + new Date().toISOString().slice(0, 10) + '.json';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000); toast('書き出しました');
+    } catch (e) { toast('書き出しに失敗しました'); }
+  }
+  function importJson(file) {
+    if (!file) return;
+    try {
+      var fr = new FileReader();
+      fr.onerror = function () { toast('ファイルを読み込めませんでした'); };
+      fr.onload = function () {
+        try {
+          var d = JSON.parse(fr.result), arr = Array.isArray(d) ? d : d.items;
+          if (!Array.isArray(arr)) throw new Error('bad');
+          var ok = arr.filter(function (x) { return x && x.photo; });
+          if (!confirm(ok.length + '件の標本を読み込みます。よろしいですか？')) return;
+          var backup = items.slice();
+          ok.forEach(function (x) {
+            var rec = { id: String(x.id || uid()), photo: String(x.photo), name: String(x.name || ''), family: String(x.family || ''), date: String(x.date || nowLocal()), place: String(x.place || ''), memo: String(x.memo || '') };
+            var i = -1; for (var k = 0; k < items.length; k++) if (items[k].id === rec.id) i = k;
+            if (i >= 0) items[i] = rec; else items.push(rec);
+          });
+          if (d.settings && d.settings.display) settings.display = d.settings.display;
+          if (!save()) { items = backup; return; }
+          saveSet(); closeModal(); render(); toast('読み込みました');
+        } catch (e) { toast('このファイルは読み込めません'); }
+      };
+      fr.readAsText(file);
+    } catch (e) { toast('読み込みに失敗しました'); }
+  }
+
+  /* ---- lock ---- */
+  function showLock() {
+    var l = $('lock'); if (!l) return;
+    l.hidden = false;
+    l.innerHTML = '<div style="font-size:2rem" aria-hidden="true">🪲</div><div>パスコードを入力してください</div><input type="password" id="lIn" inputmode="numeric" autocomplete="off" aria-label="パスコード"><button class="btn pri" id="lGo">開く</button><div id="lMsg" role="alert" style="min-height:1.5em;color:#ffd2ad"></div>';
+    function tryOpen() {
+      hash($('lIn').value.trim(), function (h) {
+        if (h === settings.pass) { l.hidden = true; l.innerHTML = ''; }
+        else { $('lMsg').textContent = 'パスコードが違います'; $('lIn').value = ''; }
+      });
+    }
+    $('lGo').onclick = tryOpen;
+    $('lIn').onkeydown = function (e) { if (e.key === 'Enter') tryOpen(); };
+  }
+
+  /* ---- install banner ---- */
+  function showInstall() {
+    try {
+      if (localStorage.getItem(IKEY)) return;
+      if (window.matchMedia && matchMedia('(display-mode: standalone)').matches) return;
+      if (navigator.standalone) return;
+      var b = $('inst'); if (!b) return;
+      var ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      b.innerHTML = '<p>ホーム画面に追加してアプリとして使う' + (deferred ? '' : (ios ? '（共有ボタン →「ホーム画面に追加」）' : '（ブラウザのメニューから追加できます）')) + '</p><div class="row" style="margin-top:0">' +
+        (deferred ? '<button class="btn pri" id="iAdd">追加する</button>' : '') + '<button class="btn" id="iClose" style="background:transparent;color:#d9c7a8;border-color:#d9c7a8">閉じる</button></div>';
+      setTimeout(function () { b.classList.add('show'); }, 1200);
+      function dismiss() { b.classList.remove('show'); try { localStorage.setItem(IKEY, '1'); } catch (e) {} }
+      $('iClose').onclick = dismiss;
+      if ($('iAdd')) $('iAdd').onclick = function () { try { deferred.prompt(); deferred.userChoice.then(dismiss); } catch (e) { dismiss(); } };
+    } catch (e) {}
+  }
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; showInstall(); });
+
+  /* ---- init ---- */
+  load();
+  document.querySelectorAll('.tabs button').forEach(function (b) { b.onclick = function () { setView(b.getAttribute('data-v')); }; });
+  $('q').oninput = function () { st.q = this.value; render(); };
+  $('sort').onchange = function () { st.sort = this.value; render(); };
+  $('btnAdd').onclick = function () { openForm(null); };
+  $('btnHelp').onclick = openHelp;
+  $('btnSet').onclick = openSettings;
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+  if (settings.pass) showLock();
+  render();
+  setTimeout(function () { if (!deferred) showInstall(); }, 2500);
+  try { if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(function () {}); } catch (e) {}
+});
+</script>
+<footer style="text-align: center; font-size: 0.75rem; color: #888; margin-top: 3rem; padding: 1rem 0.5rem; line-height: 1.5;">
+  <p style="margin-bottom: 0.5rem;">【ご利用について】</p>
+  <p style="margin-bottom: 0.5rem;">本アプリの利用に伴うトラブルやデータ損失等について、開発者は一切の責任を負いかねます。</p>
+  <p style="margin-bottom: 0.5rem;">ご意見・不具合のご報告は X（<a href="https://x.com/lblt_labo" target="_blank" rel="noopener" style="color: #666; text-decoration: underline;">@lblt_labo</a>）までお願いいたします。</p>
+  <p style="margin-top: 0.5rem;"><a href="https://ofuse.me/lbltlabo/letter" target="_blank" rel="noopener noreferrer" style="color: #666; text-decoration: underline;">☕️ 開発者を応援する / メッセージを送る</a></p>
+</footer>
+</body>
+</html>

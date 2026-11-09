@@ -1,0 +1,16 @@
+{
+  "name": "虫愛づる君たち｜身近な出会いを愛でるための記録帖",
+  "short_name": "虫愛づる君たち",
+  "description": "身近な出会いを愛でるための記録帖",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#d9c7a8",
+  "theme_color": "#3b2f25",
+  "lang": "ja",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
