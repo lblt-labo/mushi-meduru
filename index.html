@@ -20,6 +20,7 @@
 :root{--wood:#3b2f25;--wood2:#54443a;--kiri:#d9c7a8;--kiri2:#c8b38f;--paper:#f6f0e2;--ink:#2a211a;--moss:#1d5a8a;--red:#d55e00;--line:#a8956f}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
+[hidden]{display:none!important}
 body{background:var(--kiri);color:var(--ink);font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;line-height:1.7;padding-bottom:env(safe-area-inset-bottom)}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;transition:transform .12s ease,filter .12s ease,box-shadow .12s ease}
@@ -122,21 +123,31 @@ document.addEventListener('DOMContentLoaded', function () {
   var items = [], settings = { display: 'nameDate', pass: '' };
   var st = { view: 'grid', q: '', sort: 'new', y: new Date().getFullYear(), m: new Date().getMonth(), day: '', fam: '' };
   var deferred = null;
-  var $ = function (id) { return document.getElementById(id); };
+  var $ = function (id) {
+    var e = null;
+    try { e = document.getElementById(id); } catch (err) { console.error(err); }
+    if (e) return e;
+    console.warn('[mushi] element not found: #' + id);
+    var stub = document.createElement('div'); stub.value = ''; return stub;
+  };
+  console.log('[mushi] 1/7 DOMContentLoaded');
+  window.addEventListener('error', function (ev) {
+    try { console.error('[mushi] runtime error:', ev.message, ev.filename, ev.lineno); } catch (e) {}
+  });
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function toast(t) {
     try { var d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 2200); } catch (e) {}
   }
   function load() {
-    try { var a = JSON.parse(localStorage.getItem(KEY) || '[]'); items = Array.isArray(a) ? a : []; } catch (e) { items = []; }
-    try { var s = JSON.parse(localStorage.getItem(SKEY) || '{}'); if (s && typeof s === 'object') { settings.display = s.display || 'nameDate'; settings.pass = s.pass || ''; } } catch (e) {}
+    try { var a = JSON.parse(localStorage.getItem(KEY) || '[]'); items = Array.isArray(a) ? a : []; } catch (e) { console.error(e); items = []; }
+    try { var s = JSON.parse(localStorage.getItem(SKEY) || '{}'); if (s && typeof s === 'object') { settings.display = s.display || 'nameDate'; settings.pass = s.pass || ''; } } catch (e) { console.error(e); }
   }
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(items)); return true; }
-    catch (e) { toast('保存できませんでした。容量不足の可能性があります。バックアップを取って古い写真を整理してください'); return false; }
+    catch (e) { console.error(e); toast('保存できませんでした。容量不足の可能性があります。バックアップを取って古い写真を整理してください'); return false; }
   }
-  function saveSet() { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch (e) {} }
+  function saveSet() { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch (e) { console.error(e); } }
   function uid() { return 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
   function nowLocal() { var d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); }
   function dateOf(it) { return (it.date || '').slice(0, 10); }
@@ -182,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
       else h = familyHtml(a);
       m.innerHTML = h;
       bindMain();
-    } catch (e) { var mm = $('main'); if (mm) mm.innerHTML = '<div class="empty">表示中にエラーが起きました。再読み込みしてください。</div>'; }
+    } catch (e) { console.error(e); var mm = $('main'); if (mm) mm.innerHTML = '<div class="empty">表示中にエラーが起きました。再読み込みしてください。</div>'; }
   }
 
   function monthHtml(a) {
@@ -446,18 +457,37 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; showInstall(); });
 
   /* ---- init ---- */
-  load();
-  document.querySelectorAll('.tabs button').forEach(function (b) { b.onclick = function () { setView(b.getAttribute('data-v')); }; });
-  $('q').oninput = function () { st.q = this.value; render(); };
-  $('sort').onchange = function () { st.sort = this.value; render(); };
-  $('btnAdd').onclick = function () { openForm(null); };
-  $('btnHelp').onclick = openHelp;
-  $('btnSet').onclick = openSettings;
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
-  if (settings.pass) showLock();
-  render();
-  setTimeout(function () { if (!deferred) showInstall(); }, 2500);
-  try { if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(function () {}); } catch (e) {}
+  function step(name, fn) {
+    try { fn(); console.log('[mushi] OK  ' + name); }
+    catch (e) { console.error('[mushi] NG  ' + name, e); }
+  }
+  step('2/7 load storage', load);
+  console.log('[mushi] items:', items.length, 'lock:', !!settings.pass);
+  step('3/7 bind controls', function () {
+    document.querySelectorAll('.tabs button').forEach(function (b) { b.onclick = function () { setView(b.getAttribute('data-v')); }; });
+    var q = document.getElementById('q'); if (q) q.oninput = function () { st.q = this.value; render(); };
+    var so = document.getElementById('sort'); if (so) so.onchange = function () { st.sort = this.value; render(); };
+    var ad = document.getElementById('btnAdd'); if (ad) ad.onclick = function () { openForm(null); };
+    var hp = document.getElementById('btnHelp'); if (hp) hp.onclick = openHelp;
+    var se = document.getElementById('btnSet'); if (se) se.onclick = openSettings;
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+  });
+  step('4/7 lock screen', function () {
+    var l = document.getElementById('lock');
+    if (l) l.hidden = true;
+    if (settings.pass) showLock();
+  });
+  step('5/7 first render', render);
+  step('6/7 install banner timer', function () { setTimeout(function () { if (!deferred) showInstall(); }, 2500); });
+  step('7/7 service worker', function () {
+    if (!('serviceWorker' in navigator)) return;
+    window.addEventListener('load', function () {
+      try {
+        navigator.serviceWorker.register('./sw.js').then(function () { console.log('[mushi] service worker registered'); }).catch(function (e) { console.warn('[mushi] service worker skipped:', e && e.message); });
+      } catch (e) { console.warn('[mushi] service worker skipped:', e); }
+    });
+  });
+  console.log('[mushi] init finished');
 });
 </script>
 <footer style="text-align: center; font-size: 0.75rem; color: #888; margin-top: 3rem; padding: 1rem 0.5rem; line-height: 1.5;">
